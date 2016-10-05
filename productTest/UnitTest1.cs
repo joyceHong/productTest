@@ -2,7 +2,6 @@
 using NSubstitute;
 using productTest;
 using System.Collections.Generic;
-
 namespace productTest
 {
     [TestClass]
@@ -13,46 +12,7 @@ namespace productTest
         public void 按照三組總合Cost的值()
         {
             #region 假資料
-            List<Product> productList = new List<Product>();
-            productList.Add(new Product()
-            {
-                id = 1,
-                cost = 100,
-                revenue = 120,
-                sellPrice = 220
-            });
-
-            productList.Add(new Product()
-            {
-                id = 2,
-                cost = 100,
-                revenue = 120,
-                sellPrice = 220
-            });
-
-            productList.Add(new Product()
-            {
-                id = 3,
-                cost = 100,
-                revenue = 120,
-                sellPrice = 220
-            });
-
-            productList.Add(new Product()
-            {
-                id = 4,
-                cost = 100,
-                revenue = 120,
-                sellPrice = 220
-            });
-
-            productList.Add(new Product()
-            {
-                id = 5,
-                cost = 100,
-                revenue = 120,
-                sellPrice = 220
-            });
+            List<Product> productList = GetProductList();
             #endregion
 
             #region 期望值
@@ -69,8 +29,7 @@ namespace productTest
             #endregion
 
             #region 比較結果
-            Assert.AreEqual(expected[0], actual[0]);
-
+            CollectionAssert.AreEquivalent(expected, actual);
             #endregion
         }
 
@@ -78,6 +37,30 @@ namespace productTest
         public void 按照四組總合Cost值()
         {
             #region 假資料
+            List<Product> productList = GetProductList();
+            #endregion
+
+            #region 期望值
+            List<int> expected = new List<int>() {
+                400,
+                100
+            };
+            #endregion
+
+            #region 結果
+            IProductCore productCoreObj = new ProductCore();
+            List<int> actual = productCoreObj.Sum<Product>(productList, "cost", 4);
+
+            #endregion
+
+            #region 比較結果
+            CollectionAssert.AreEquivalent(expected, actual);
+
+            #endregion
+        }
+
+        private static List<Product> GetProductList()
+        {
             List<Product> productList = new List<Product>();
             productList.Add(new Product()
             {
@@ -118,26 +101,7 @@ namespace productTest
                 revenue = 120,
                 sellPrice = 220
             });
-            #endregion
-
-            #region 期望值
-            List<int> expected = new List<int>() {
-                400,
-                100
-            };
-            #endregion
-
-            #region 結果
-            IProductCore productCoreObj = new ProductCore();
-            List<int> actual = productCoreObj.Sum<Product>(productList, "cost", 4);
-
-            #endregion
-
-            #region 比較結果
-            Assert.AreEqual(expected[1], actual[1]);
-
-            #endregion
+            return productList;
         }
-
     }
 }
